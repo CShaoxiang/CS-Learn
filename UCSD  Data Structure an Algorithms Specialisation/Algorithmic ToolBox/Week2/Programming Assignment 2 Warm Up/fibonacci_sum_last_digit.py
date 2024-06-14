@@ -1,4 +1,7 @@
 def fibonacci_sum(n):
+    n = n % Cal_Pisano_period(10)
+
+
     if n <= 1:
         return n
 
@@ -15,7 +18,18 @@ def fibonacci_sum(n):
     return sum
 
 
+def Cal_Pisano_period(m):
 
+    if m <=1 :
+        return m
+
+    f0 , f1 = 0 , 1
+    for index in range(0, m*m):
+        f0 , f1 = f1 , (f0 + f1) % m
+
+        if f0 == 0 and f1 == 1:
+
+            return index+1
 
 if __name__ == '__main__':
     n = int(input())

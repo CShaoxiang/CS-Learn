@@ -1,8 +1,9 @@
 def fibonacci_huge(n, m):
-    if n <= 1:
-        return n
 
     n = n % Cal_Pisano_period(m)
+
+    if n <= 1:
+        return n
 
     f0, f1 = 0, 1
 
