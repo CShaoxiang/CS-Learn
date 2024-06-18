@@ -1,96 +1,74 @@
-def majority_element_naive(elements):
-    for e in elements:
-        if elements.count(e) > len(elements) / 2:
-            return 1
+"""
+    Determines whether a given sequence of numbers contains an element that appears more than half the times
+    using a divide-and-conquer approach.
 
-    return 0
+    The function follows these steps:
+    1. If the sequence is empty, return 0.
+    2. Recursively divide the sequence into two halves until the base case of a single element is reached.
+    3. Combine the results of the two halves to determine the majority element in the entire sequence.
+
+    Args:
+        elements (list): A list of integers representing the sequence.
+
+    Returns:
+        int: Returns 1 if there is an element that appears more than n/2 times, otherwise returns 0.
+
+
+    Time Complexity:
+        O(n * log n)
+        Recursive Calls: The array is recursively split into two halves, resulting in  O(log n) levels of recursion.
+
+        Counting Elements:
+            At each level of recursion,
+            counting the occurrences of the majority elements in the combined subarray takes O(n) time.
+
+        Overall: Combining these, the overall time complexity is  O(n * log n).
+"""
+
 
 def majority_element(elements):
-    quicksort(elements, 0, len(elements) - 1)
+    def majority_divide_conquer(start, end):
 
-    if len(elements) == 0:
-        return 0
+        # Base case: if the subarray contains only one element, that element is the majority
 
-    count , temp_value = 0 , elements[0]
+        if start == end:
+            return elements[start]
 
-    for e in range(len(elements)):
-        if elements[e] == temp_value:
-            count += 1
+        # Divide: find the midpoint of the current subarray
+        mid = (start + end) // 2
+
+        # Conquer: recursively find the majority element in the left and right halves
+        left = majority_divide_conquer(start, mid)
+        right = majority_divide_conquer(mid + 1, end)
+
+        if left == right:
+            return left
+
 
         else:
-            temp_value = elements[e]
-            count = 1
+            left_count = 0
+            right_count = 0
 
-        if count > len(elements) / 2:
-            return 1
+            for i in range(start, end):
+                if elements[i] == left:
+                    left_count += 1
 
+                else:
+                    right_count += 1
 
-    return 0
+            return left if left_count > right_count else right
 
+    n = len(elements)
+    if n == 0:
+        return 0
 
-def quicksort(arr, left=0, right=None):
-    if right is None:
-        right = len(arr) - 1
-    if left < right:
-        pivot_value = median_of_medians(arr, left, right)
-        pivot_index = quick_sort_partition(arr, left, right, pivot_value)
+    candidate = majority_divide_conquer(0, n - 1)
 
-        # print(pivot_index, pivot_value)
-        # print(arr)
-
-        quicksort(arr, left, pivot_index - 1)
-        quicksort(arr, pivot_index + 1, right)
-
-def quick_sort_partition(arr, low, high,pivot_value):
-
-    pivot_index = arr.index(pivot_value, low, high+1)
-    arr[pivot_index], arr[high] = arr[high], arr[pivot_index]
-
-    store_index = low
-    for i in range(low, high):
-        if arr[i] < pivot_value:
-            arr[i], arr[store_index] = arr[store_index], arr[i]
-
-            store_index += 1
-
-    arr[store_index], arr[high] = arr[high], arr[store_index]
-
-    return store_index
-
-
-def median_of_medians(arr, left, right):
-    n = right - left + 1
-
-    # Base Case
-    if n <= 10:
-        return partition5(arr, left, right)
-
-    array_of_medians = []
-
-    for i in range(left, right + 1, 5):
-        right_head = i + 4 if i + 4 <= right else right
-
-        median = partition5(arr, i, right_head)
-
-        array_of_medians.append(median)
-
-
-    # recursively compute medians untill len(medians) < 10)
-    return median_of_medians(array_of_medians, 0, len(array_of_medians) - 1)
-
-
-'''
-sorts a small sublist (of up to 5 elements) 
-and returns the index of the median of this sublist within the original array. 
-'''
-
-
-def partition5(arr, left, right):
-    sub_list = arr[left:right + 1]
-    sub_list.sort()
-
-
-    return sub_list[(len(sub_list) // 2)]
+    # Verify the candidate
+    if elements.count(candidate) > n / 2:
+        return 1
+    else:
+        return 0
 
 
 if __name__ == '__main__':
@@ -99,7 +77,6 @@ if __name__ == '__main__':
     assert len(input_elements) == input_n
     print(majority_element(input_elements))
 
-    # arr = [1,2,3,4,1,1]
-    #
+    # arr = []
     #
     # print(majority_element(arr))
