@@ -15,7 +15,8 @@
  */
 
 // Stub value to indicate an implementation
-const IMPLEMENT_THIS = undefined;
+const firstConst = 1;
+const secondConst = firstConst + 1; 
 
 /*****************************************************************
  * Exercise 1:
@@ -41,6 +42,16 @@ const IMPLEMENT_THIS = undefined;
  *  - anonymousFunction: using an anonymous function declared with the "function" keyword
  *  - arrowFunction: using an arrow function
  */
+function aFunction( ){
+  
+  return secondConst * 2;
+};
+
+const anonymousFunction = function(){
+  return secondConst * 2
+}
+
+const arrowFunction = ( ) => secondConst *2;
 
 /*****************************************************************
  * Exercise 3:
@@ -60,7 +71,10 @@ const IMPLEMENT_THIS = undefined;
  * @param x Number to check
  * @returns True if x is divisible by three or five, false otherwise
  */
-const isDivisibleByThreeOrFive = IMPLEMENT_THIS;
+const isDivisibleByThreeOrFive = (x) => {
+  return x % 3 == 0 || x % 5 == 0;
+
+};
 
 /**
  * Sum up to a specified number, ignoring values.
@@ -72,9 +86,12 @@ const isDivisibleByThreeOrFive = IMPLEMENT_THIS;
  * @returns the sum
  */
 const selectiveSummer = (f) => (n) => {
-  const summer_aux = IMPLEMENT_THIS;
+  const summer_aux = (n,sum = 0) => {
+    return n? (f(n) ? summer_aux(n - 1, sum + n) : summer_aux(n - 1, sum)) : sum;
 
-  return summer_aux(n);
+  };
+
+  return summer_aux(n-1);
 };
 
 /**
@@ -85,12 +102,12 @@ const selectiveSummer = (f) => (n) => {
  * @param n Target number
  * @returns The sum of numbers up to but not including n that are divisible by three or five
  */
-const filteredSum = (n) => IMPLEMENT_THIS;
+const filteredSum = (n) => selectiveSummer(isDivisibleByThreeOrFive)(n);
 
 /**
  * @returns Answer to project euler problem 1
  */
-const projectEulerProblem1 = () => IMPLEMENT_THIS(1000);
+const projectEulerProblem1 = () => filteredSum(1000);
 
 /*****************************************************************
  * Exercise 4:
@@ -106,7 +123,9 @@ const projectEulerProblem1 = () => IMPLEMENT_THIS(1000);
  *
  * @param arr Array to print
  */
-const printArray = IMPLEMENT_THIS;
+const printArray = (arr) => {
+  arr.forEach(x => console.log(x))
+};
 
 /**
  * Create a new array with each item incremented by one (1)
@@ -114,7 +133,9 @@ const printArray = IMPLEMENT_THIS;
  * @param arr Array to increment
  * @returns New array with incremented items
  */
-const addOne = IMPLEMENT_THIS;
+const addOne = (arr) => {
+ return  arr.map(x => x+1)
+};
 
 /**
  * Create a new array with ones removed
@@ -122,7 +143,9 @@ const addOne = IMPLEMENT_THIS;
  * @param arr Input array
  * @returns Array without ones
  */
-const removeOnes = IMPLEMENT_THIS;
+const removeOnes = (arr) => {
+  return arr.filter( x => x !==1);
+};
 
 /**
  * Calculate the sum of the items in an array
@@ -130,7 +153,9 @@ const removeOnes = IMPLEMENT_THIS;
  * @param arr Input array
  * @returns Sum of items in arr
  */
-const sumArray = IMPLEMENT_THIS;
+const sumArray = (arr) => {
+  return arr.reduce((sum, item) => sum + item, 0);
+}
 
 /*****************************************************************
  * Exercise 5:
@@ -140,55 +165,26 @@ const sumArray = IMPLEMENT_THIS;
  */
 
 const multiplyArray = (n, array) => {
-  let newArray = []
-  for (let i = 0; i < array.length; i++) {
-    newArray.push(array[i] * n)
-  }
-  return newArray
-}
+  return array.map(item => item * n);
+};
 
 const filterEvenNumbers = (array) => {
-  let newArray = [];
-  for (let i = 0; i < array.length; i++) {
-      if (array[i] % 2 === 0) {
-          newArray.push(array[i]);
-      }
-  }
-  return newArray;
-}
+  return array.filter(item => item % 2 === 0);
+};
+
 
 // Do *not* use Math.max
 const findMax = (array) => {
-  let max = array[0];
-  for (let i = 1; i < array.length; i++) {
-      if (array[i] > max) {
-          max = array[i];
-      }
-  }
-  return max;
-}
+  return array.reduce((max, item) => (item > max ? item : max), array[0]);
+};
 
 const tripleAndFilterOdds = (array) => {
-  let newArray = [];
-  for (let i = 0; i < array.length; i++) {
-      let tripled = array[i] * 3;
-      if (tripled % 2 !== 0) {
-          newArray.push(tripled);
-      }
-  }
-  return newArray;
-}
+  return array.map(item => item * 3).filter(item => item % 2 !== 0);
+};
 
 const countOddNumbers = (array) => {
-  let count = 0;
-  for (let i = 0; i < array.length; i++) {
-    if (array[i] % 2 !== 0) {
-      count++;
-    }
-  }
-  return count;
-}
-
+  return array.reduce((count, item) => item % 2 !== 0 ? count + 1 : count, 0);
+};
 /*****************************************************************
  * Exercise 6:
  *
@@ -203,12 +199,18 @@ const countOddNumbers = (array) => {
  * @param n Target value
  * @returns Array of integers in the range [0, n)
  */
-const range = IMPLEMENT_THIS;
+const range = (n) => {
+  return  Array.from(Array(n).keys())
+}
 
 /**
  * @returns Answer to project euler problem 1
  */
-const projectEulerProblem1Again = () => IMPLEMENT_THIS;
+const projectEulerProblem1Again = (n=1000) =>  {
+  const numbers = range(n);
+  const multiplesOfThreeOrFive = numbers.filter(x => x % 3 === 0 || x % 5 === 0);
+  return sumArray(multiplesOfThreeOrFive);
+}
 
 /*****************************************************************
  * Exercise 7:
@@ -232,7 +234,7 @@ const projectEulerProblem1Again = () => IMPLEMENT_THIS;
  * @returns Cons list, function in closure
  */
 function cons(head, rest = null) {
-  return (selector) => IMPLEMENT_THIS;
+  return (selector) => selector(head,rest);
 }
 
 /**
@@ -244,7 +246,7 @@ function cons(head, rest = null) {
 function head(list) {
   if (!list) throw new TypeError("list is null");
 
-  return list(IMPLEMENT_THIS);
+  return list((head,rest) => head);
 }
 
 /**
@@ -256,7 +258,7 @@ function head(list) {
 function rest(list) {
   if (!list) throw new TypeError("list is null");
 
-  return list(IMPLEMENT_THIS);
+  return list((head,rest) => rest );
 }
 
 /*****************************************************************
@@ -294,7 +296,7 @@ function forEach(f, list) {
 function map(f, list) {
   if (!list) return null;
 
-  return IMPLEMENT_THIS;
+  return cons(f(head(list)),map(f,rest(list)));
 }
 
 /**
@@ -308,7 +310,7 @@ function map(f, list) {
 function reduce(f, acc, list) {
   if (!list) return acc;
 
-  return IMPLEMENT_THIS;
+  return reduce(f,f(acc,head(list)),rest(list))
 }
 
 /**
@@ -322,7 +324,8 @@ function filter(f, list) {
   if (!list) return null;
 
   // Skip value
-  if (!f(head(list))) return IMPLEMENT_THIS;
+  if (!f(head(list))) return filter(f, rest(list));
 
-  return IMPLEMENT_THIS;
+  // Include value
+  return cons(head(list), filter(f, rest(list)));
 }
