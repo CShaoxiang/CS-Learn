@@ -16,23 +16,24 @@ def partition3(values):
 
     subset_sum = sum(values) // 3
 
-    dp_array = [[[0 for i in range(subset_sum+1)] for i in range(len(values) + 1)] for i in range(len(values)+ 1)]
+    dp_array = [[[0 for _ in range(subset_sum + 1)] for _ in range(subset_sum + 1)] for _ in range(len(values) + 1)]
 
-    # zero sum
+    # Initialize base case where subset sums are zero
 
-    for i in range(subset_sum + 1):
-        for j in range(subset_sum + 1):
-            dp_array[0][i][j] = 1
+    dp_array[0][0][0] = 1
 
     for i in range(1, len(values) + 1):
-
         num = values[i - 1]
 
         for s_1 in range(subset_sum + 1):
             for s_2 in range(subset_sum + 1):
-                pass
+                dp_array[i][s_1][s_2] = dp_array[i - 1][s_1][s_2]
+                if s_1 >= num:
+                    dp_array[i][s_1][s_2] = dp_array[i][s_1][s_2] or dp_array[i - 1][s_1 - num][s_2]
+                if s_2 >= num:
+                    dp_array[i][s_1][s_2] = dp_array[i][s_1][s_2] or dp_array[i - 1][s_1][s_2 - num]
 
-    return (subset_sum, len(dp_array), len(dp_array[0]), len(dp_array[0][0]), dp_array)
+    return dp_array[len(values)][subset_sum][subset_sum]
 
 
 if __name__ == '__main__':
