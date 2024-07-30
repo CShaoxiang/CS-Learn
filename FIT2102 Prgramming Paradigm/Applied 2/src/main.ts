@@ -148,7 +148,7 @@ if (rectangleBlue) {
 type Todo = {
   timestamp : number
   from : string
-  content : Array<TodoItem>
+  content : ReadonlyArray<TodoItem>
 };
 
 /**
@@ -222,15 +222,18 @@ const todo: Todo = {
  * @param item Todo item
  * @returns Prettified todo item
  */
-const prettifyTodoItem = (item: TodoItem): string => IMPLEMENT_THIS;
+const prettifyTodoItem = (item: TodoItem): string => {
+  return (Object.entries(item)).map( x => x.join(' : ')).join(' | ');
+}
 
 /**
  *
  * @param content Collection of todo items
  * @returns Prettified content
  */
-const prettifyContent = (content: ReadonlyArray<TodoItem>): string =>
-  IMPLEMENT_THIS;
+const prettifyContent = (content: ReadonlyArray<TodoItem>): string =>{
+  return (content.map(x => prettifyTodoItem(x))).join('\n');
+}
 
 /**
  *
@@ -243,7 +246,11 @@ const prettifyContent = (content: ReadonlyArray<TodoItem>): string =>
  * /Hint 2/: Object destructuring can be used in the arguments
  *  e.g. ({ someKey }) => someKey
  */
-const prettifyTodo = (todo: Todo): string => IMPLEMENT_THIS;
+const prettifyTodo = (todo: Todo): string => {
+   const { timestamp, from, content } = todo;
+  return `timestamp: ${timestamp}\nfrom: ${from}\ncontent:\n${prettifyContent(content)}`;
+
+};
 
 outputText("pretty_object_output", prettifyTodo(todo).toString());
 
@@ -262,9 +269,9 @@ outputText("pretty_object_output", prettifyTodo(todo).toString());
  */
 
 type BinaryTree<T> = Readonly<{
-  data: IMPLEMENT_THIS;
-  left?: IMPLEMENT_THIS;
-  right?: IMPLEMENT_THIS;
+  data: number;
+  left?: BinaryTree<T>;
+  right?: BinaryTree<T>;
 }>;
 
 /**
@@ -282,11 +289,18 @@ type BinaryTree<T> = Readonly<{
  * @param right Right child
  * @returns Binary tree node
  */
-const binaryTree = (
-  data: IMPLEMENT_THIS,
-  left?: IMPLEMENT_THIS,
-  right?: IMPLEMENT_THIS,
-): BinaryTree<IMPLEMENT_THIS> => IMPLEMENT_THIS;
+const binaryTree = <T>(
+  data: number,
+  left?: BinaryTree<T>,
+  right?: BinaryTree<T>,
+): BinaryTree<T> => {
+  return {
+    data,
+    left,
+    right,
+  }
+
+};
 
 const binaryTreeExample = binaryTree(
   1,
