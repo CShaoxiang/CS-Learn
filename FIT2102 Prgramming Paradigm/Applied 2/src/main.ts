@@ -57,6 +57,8 @@ const outputText = (targetDiv: string, text: string) =>
  *
  * see: https://tgdwyer.github.io/typescript1/#using-the-compiler-to-ensure-immutability
  */
+const  anObject ={ x : 5 }
+const  anotherObject = {...anObject ,y :  10}
 
 /*****************************************************************
  * Exercise 2
@@ -73,10 +75,10 @@ const outputText = (targetDiv: string, text: string) =>
 
 // Define an animation function
 function animate(
-  rect: IMPLEMENT_THIS,
-  startX: IMPLEMENT_THIS,
-  finalX: IMPLEMENT_THIS,
-  duration: IMPLEMENT_THIS,
+  rect: Element ,
+  startX: number,
+  finalX: number,
+  duration: number,
 ) {
   const startTime = performance.now();
   function nextFrame() {
@@ -88,7 +90,7 @@ function animate(
     if (elapsedTime >= duration) {
       // Set the final position of the rectangle.
       // We can use `setAttribute` to modify the HTML Element. In this case, we are changing the x attribute.
-      rect.setAttribute("x", finalX);
+      rect.setAttribute("x", finalX.toString());
       return; // Stop the animation
     }
 
@@ -96,7 +98,7 @@ function animate(
     const x = startX + ((finalX - startX) * elapsedTime) / duration;
 
     // Set the intermediate position of the rectangle.
-    rect.setAttribute("x", x);
+    rect.setAttribute("x", x.toString());
 
     // Call the nextFrame function again after a delay of 1000/60 milliseconds
     setTimeout(nextFrame, 1000 / 60); // 60 FPS
@@ -105,8 +107,22 @@ function animate(
 }
 
 const rectangle = document.getElementById("redRectangle");
+const rectangleBlue = document.getElementById("blueRectangle");
 const duration = 5000; // 5 seconds in milliseconds
-animate(rectangle, 0, 370, duration);
+const duration2 = 10000; 
+
+if (rectangle) {
+  animate(rectangle, 0, 370, duration);
+} else {
+  console.error("Red rectangle element not found.");
+}
+
+if (rectangleBlue) {
+  animate(rectangleBlue, 370, 0, duration2);
+} else {
+  console.error("Blue rectangle element not found.");
+}
+
 
 /*****************************************************************
  * Exercise 3a
@@ -129,19 +145,26 @@ animate(rectangle, 0, 370, duration);
  *
  * /Hint 2/: The `content` field is an *array* of something, what could it be?
  */
-type Todo = IMPLEMENT_THIS;
+type Todo = {
+  timestamp : number
+  from : string
+  content : Array<TodoItem>
+};
 
 /**
  * Item in a todo list
  */
-type TodoItem = IMPLEMENT_THIS;
+type TodoItem = {
+  userId : number
+  id : number
+  title : string 
+  completed : boolean
+};
 
 const todo: Todo = {
   timestamp: 65535,
   from: "https://jsonplaceholder.typicode.com/todos",
-  // Base64 encoding of something ... I wonder what ((⇀‸↼))
-  verySecretVerySecureCodeThatDefinitelyDoesNotContainAnythingUseful:
-    "bmV2ZXIgZ29ubmEgZ2l2ZSB5b3UgdXAKbmV2ZXIgZ29ubmEgbGV0IHlvdSBkb3duCm5ldmVyIGdvbm5hIHJ1biBhcm91bmQKYW5kIGRlc2VydCB5b3UKCm5ldmVyIGdvbm5hIG1ha2UgeW91IGNyeQpuZXZlciBnb25uYSBzYXkgZ29vZGJ5ZQpuZXZlciBnb25uYSB0ZWxsIGEgbGllCmFuZCBodXJ0IHlvdQ==",
+
   content: [
     {
       userId: 1,
