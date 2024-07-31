@@ -346,13 +346,15 @@ const binaryTreeExample = binaryTree(
  * @param node Root node of binary tree
  * @returns Prettified binary tree
  */
-function prettifyBinaryTree<T>(node: BinaryTree<T>): string {
-  const current = String(node.data);
+function prettifyBinaryTree<T>(node: BinaryTree<T>, recursionLevel = 0): string {
 
-  const left = IMPLEMENT_THIS;
-  const right = IMPLEMENT_THIS;
+  const prefix: string = '|- '.repeat(recursionLevel) 
+  const current = `${prefix}${node.data}\n`
 
-  return IMPLEMENT_THIS;
+  const left = node.left ? prettifyBinaryTree(node.left, recursionLevel+1) : ''
+  const right = node.right ? prettifyBinaryTree(node.right,recursionLevel+1): '' 
+
+  return current+ left + right ;
 }
 
 const prettyBinaryTree = prettifyBinaryTree(binaryTreeExample);
@@ -363,15 +365,22 @@ outputText("pretty_btree_output", prettyBinaryTree);
  *
  * Implement prettyPrintNaryTree, which takes a NaryTree as input
  * and returns a list of the type expected by your nest function
+ * 
+ * return {  data , children } returns an object assigned with values
  */
 
 type NaryTree<T> = Readonly<{
-  data: IMPLEMENT_THIS;
-  children: IMPLEMENT_THIS;
+  data: number;
+  children: NaryTree<T>[];
 }>;
 
-const naryTree = <T>(data: IMPLEMENT_THIS, children: IMPLEMENT_THIS = []) =>
-  IMPLEMENT_THIS;
+const naryTree = <T>(data: T, children: NaryTree<T>[] = [])=>
+  {
+    return {
+      data,
+      children
+    }
+  };
 
 const naryTreeExample = naryTree(1, [
   naryTree(2),
@@ -415,10 +424,14 @@ const naryTreeExample = naryTree(1, [
  * @param node Root of Nary tree
  * @returns Prettified Nary tree
  */
-function prettifyNaryTree<T>(node: NaryTree<T>): string {
-  const current = String(node.data);
+function prettifyNaryTree<T>(node: NaryTree<T> , level = 0 ): string {
 
-  const children = IMPLEMENT_THIS;
+  const prefix = `|- `.repeat(level)
+
+  const current = `${prefix}${node.data}`;
+
+  const children = node.children ? node.children.map(x => prettifyNaryTree(x,level+1)) : '';
+
 
   return [current, ...children].filter(Boolean).join("\n");
 }
