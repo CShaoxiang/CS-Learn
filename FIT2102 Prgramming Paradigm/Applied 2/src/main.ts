@@ -75,7 +75,7 @@ const  anotherObject = {...anObject ,y :  10}
 
 // Define an animation function
 function animate(
-  rect: Element ,
+  rect: HTMLElement ,
   startX: number,
   finalX: number,
   duration: number,
