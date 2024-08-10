@@ -14,6 +14,7 @@
  * Ask a tutor if in doubt!
  */
 
+
 // Stub value to indicate an implementation
 const firstConst = 1;
 const secondConst = firstConst + 1; 
@@ -329,3 +330,5 @@ function filter(f, list) {
   // Include value
   return cons(head(list), filter(f, rest(list)));
 }
+
+

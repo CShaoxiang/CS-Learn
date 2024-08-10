@@ -52,8 +52,10 @@ import {
   partition,
   Observable,
   of,
+  toArray,
+  from,
 } from "rxjs";
-import { concatMap, filter, map, scan, takeUntil, delay } from "rxjs/operators";
+import { concatMap, filter, map, scan, takeUntil, delay, mergeMap } from "rxjs/operators";
 
 // Stub value to indicate an implementation
 const IMPLEMENT_THIS: any = undefined;
@@ -251,10 +253,10 @@ function keyboardControl() {
    * @returns Observable stream that indicates changes in state for
    *  the particular keypress
    */
-  const fromKey = (keyCode: string, IMPLEMENT_THIS: IMPLEMENT_THIS) =>
+  const fromKey = (keyCode: string,axis : 'x' | 'y' , unit : number) =>
     key$.pipe(
       filter(({ code }) => code === keyCode),
-      map(() => IMPLEMENT_THIS),
+      map(() => ( {axis , unit})),
     );
 
   /**
@@ -262,13 +264,13 @@ function keyboardControl() {
    */
 
   /** Decrease x */
-  const left$ = fromKey("KeyA", IMPLEMENT_THIS);
+  const left$ = fromKey("KeyA", 'x' , -10);
   /** Decrease y */
-  const up$ = fromKey("KeyW", IMPLEMENT_THIS);
+  const up$ = fromKey("KeyW", 'y' , -10);
   /** Increase x */
-  const right$ = fromKey("KeyD", IMPLEMENT_THIS);
+  const right$ = fromKey("KeyD", 'x' , 10);
   /** Increase y */
-  const down$ = fromKey("KeyS", IMPLEMENT_THIS);
+  const down$ = fromKey("KeyS", 'y' , 10);
 
   /**
    * /Hint/: What operator can we use to merge observables?
@@ -278,9 +280,19 @@ function keyboardControl() {
    * /Hint 2/: This should make use of the scan function
    */
 
-  IMPLEMENT_THIS(left$, down$, up$, right$)
-    .pipe()
-    .subscribe(({ x, y }: IMPLEMENT_THIS) => {
+  merge(left$, down$, up$, right$)
+    .pipe(
+
+      scan(({x,y} , {axis , unit}) =>{
+        return axis == 'x' ? { x : x+ unit , y } : { x, y : y+unit }
+      },
+      {
+        x : startProps.x,
+        y : startProps.y
+      }
+    )
+  )
+    .subscribe(({ x, y }) => {
       rect.setAttribute("x", String(x));
       rect.setAttribute("y", String(y));
     });
@@ -324,7 +336,21 @@ function printWithDelay() {
   const process = (text: string) => {
     // Do something with each line
     const lines = text.split("\n");
-  };
+    from(lines)
+    .pipe(
+      // Split each line into delay and text
+      map((line) => {
+        const [delayTime, message] = line.split(",");
+        return { delayTime: parseInt(delayTime, 10) * 1000, message };
+      }),
+      // Apply the delay in sequence
+      concatMap(({ delayTime, message }) =>
+        from([message]).pipe(delay(delayTime))
+      )
+    )
+    // Log the message after the delay
+    .subscribe((message) => console.log(message));
+};
 }
 /**
  * Do Not Modify
@@ -339,3 +365,6 @@ document.addEventListener("DOMContentLoaded", function (event) {
   keyboardControl();
   printWithDelay();
 });
+
+
+
