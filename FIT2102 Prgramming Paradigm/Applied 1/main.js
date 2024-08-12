@@ -332,3 +332,5 @@ function filter(f, list) {
 }
 
 
+console.log([1, 2, 3, 4].reduce((acc, n) => n % 2 == 0 ? acc.push(n) : acc, [])
+)
