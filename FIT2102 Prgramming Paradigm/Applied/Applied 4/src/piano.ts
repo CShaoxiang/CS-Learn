@@ -1,5 +1,5 @@
-import { fromEvent, merge, Observable, timer } from "rxjs";
-import { map, mergeMap, startWith, take } from "rxjs/operators";
+import { fromEvent, merge, Observable, timer, from } from "rxjs";
+import { flatMap, map, mergeMap, startWith, take } from "rxjs/operators";
 import * as Tone from "tone";
 import { SampleLibrary } from "./tonejs-instruments";
 
@@ -40,7 +40,7 @@ type IMPLEMENT_THIS = any;
  * Do *not* use the ! operator to handle nulls.
  * Do *not* use the filter, operation, but play around with flatMap.
  *
- * /Hint/: ZmxhdE1hcCB3aWxsIGJlIHRoZSBmdW5jdGlvbiB0byB1c2U
+ * /Hint/: flatMap will be the function to use
  */
 
 export function getAllElements(): readonly HTMLElement[] {
@@ -56,7 +56,10 @@ export function getAllElements(): readonly HTMLElement[] {
     // Element IDs of all black and white keys
     const allIds = bRange.concat(wRange);
 
-    return IMPLEMENT_THIS;
+    return allIds.flatMap((key) => {
+        const element = document.getElementById(key);
+        return element ? [element] : [];
+    });
 }
 
 /*****************************************************************
@@ -87,7 +90,25 @@ type MouseUpDownEvent = Readonly<{
 export function mergeUpDown(
     element: HTMLElement,
 ): Observable<MouseUpDownEvent> {
-    return IMPLEMENT_THIS;
+    const mousedown$ = fromEvent<MouseEvent>(element, "mousedown").pipe(
+        map((): MouseUpDownEvent => ({ start: true, element: element })),
+    );
+
+    const mouseup$ = mousedown$.pipe(
+        mergeMap(() =>
+            fromEvent<MouseEvent>(document, "mouseup").pipe(
+                take(1),
+                map(
+                    (): MouseUpDownEvent => ({
+                        start: false,
+                        element: element,
+                    }),
+                ),
+            ),
+        ),
+    );
+
+    return merge(mousedown$, mouseup$);
 }
 
 /*****************************************************************
@@ -143,7 +164,32 @@ function example() {
  *****************************************************************/
 
 function main() {
-    const YOUR_CODE_IN_THIS_FUNCTION = IMPLEMENT_THIS;
+    const keyElements = getAllElements(); // Get all piano key elements
+
+    keyElements.forEach((keyElement) => {
+        const keyId = keyElement.id;
+
+        // Subscribe to mousedown and mouseup events
+        mergeUpDown(keyElement).subscribe((event) => {
+            if (event.start) {
+                keyElement.classList.add("highlight"); // Add visual feedback (highlight the key)
+
+                const note = Tone.Frequency(
+                    pianoKeyToMidi(keyId),
+                    "midi",
+                ).toNote();
+                const instrument = samples["piano"];
+                instrument.triggerAttack(note, undefined, 1.5);
+            } else {
+                // mouse up
+                keyElement.classList.remove("highlight");
+
+                const midiNote = pianoKeyToMidi(keyId);
+                const instrument = samples["piano"];
+                instrument.triggerRelease(midiNote);
+            }
+        });
+    });
 }
 
 export const run = () => {
