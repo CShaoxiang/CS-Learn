@@ -99,7 +99,7 @@ class Thrust implements Action {
 }
 
 class Teleport implements Action { 
-    constructor(public readonly ) { } 
+    constructor() { } 
     /**
      * accellerate the ship
      * @param s previous state

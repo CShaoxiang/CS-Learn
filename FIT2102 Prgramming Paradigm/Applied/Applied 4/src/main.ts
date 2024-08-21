@@ -193,7 +193,7 @@ function piApproximation() {
      * Can we use them to get 2 random values per dot and count the dots that have been generated?
        Make sure to use the Dot type that has been provided!*/
 
-    const dot$ = zip(rngStream(), rngStreamY()).pipe(
+    const dot$ = zip(rngStream(), rngStreamY(1)).pipe(
         scan(
             (acc: Data, [x, y], index: number) => {
                 const inside = inCircle(x, y);
@@ -202,6 +202,7 @@ function piApproximation() {
                     y,
                     colour: inside ? "green" : "red",
                 };
+                console.log(x, y);
                 return {
                     dot,
                     counts: acc.counts + (inside ? 1 : 0), // Increment count if inside circle
