@@ -68,7 +68,7 @@ function asteroids() {
       scan(a => RNG.hash(a),seed),
       map(RNG.scale),
     ),
-    teleport$ = key$('keydown','Enter').pipe(map(_ =>new Teleport(true)))
+    teleport$ = key$('keydown','Enter').pipe(map(_ =>new Teleport()))
 
   /**
    * Exercise 1: Implement the main game stream pipeline - add imports above as necessary.

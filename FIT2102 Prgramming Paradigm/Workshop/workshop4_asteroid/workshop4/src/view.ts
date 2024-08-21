@@ -20,7 +20,7 @@ function updateView(onFinish: () => void) {
             score = document.getElementById("score")
 
         // if getElement is null, exit function early without doing anything
-        if (!svg || !ship) return
+        if (!svg || !ship || !score) return
 
         // document.getElementById can return null
         // so use optional chaining to safely access method on element

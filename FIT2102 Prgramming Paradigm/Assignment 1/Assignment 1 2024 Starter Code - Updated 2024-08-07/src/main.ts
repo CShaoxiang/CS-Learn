@@ -14,13 +14,15 @@
 
 import "./style.css";
 
-import { fromEvent, interval, merge } from "rxjs";
+import { fromEvent, interval, merge, Observable } from "rxjs";
 import { map, filter, scan } from "rxjs/operators";
 import * as Tone from "tone";
 import { SampleLibrary } from "./tonejs-instruments";
 import { State, initialState } from "./state";
 import { Constants, Viewport, Note, Key, Event } from "./types";
 import { updateView } from "./view";
+import {playInstrument,RNG} from './util'
+import { AnyCatcher } from "rxjs/internal/AnyCatcher";
 
 /**
  * This is the function called on page load. Your main game loop
@@ -30,12 +32,26 @@ export function main(
     csvContents: string,
     samples: { [key: string]: Tone.Sampler },
 ) {
+
     /** User input */
 
-    const key$ = fromEvent<KeyboardEvent>(document, "keypress");
+const key$ = (e: Event , k : Key) => fromEvent<KeyboardEvent>(document,e)
+        .pipe(
+            filter(({code}) => code === k)),
 
-    const fromKey = (keyCode: Key) =>
-        key$.pipe(filter(({ code }) => code === keyCode));
+        playInColumn1$ = key$('keydown','KeyH'),
+        playInColumn2$ = key$('keydown','KeyJ'),
+        playInColumn3$ = key$('keydown', 'KeyK'),
+        playInColumn4$ = key$('keydown','KeyL'),
+
+        rng$ = (source : Observable<any>) => (seed : number) => source.pipe(
+            scan(a => RNG.hash(a),seed),
+            map(RNG.scale),
+        )
+       
+
+
+    
 
     /** Determines the rate of time steps */
     const tick$ = interval(Constants.TICK_RATE_MS);
