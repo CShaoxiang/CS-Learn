@@ -6,3 +6,6 @@
 # Datasource local storage ignored files
 /dataSources/
 /dataSources.local.xml
+
+git config user.name "Haoxiang Lan"
+git config user.email "simonlan0930@gmail.com"
