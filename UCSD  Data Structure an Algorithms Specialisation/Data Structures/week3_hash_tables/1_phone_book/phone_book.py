@@ -1,5 +1,5 @@
 # python3
-
+# Use direct addressing to achieve O(1) time on find() and delete ()
 class Query:
     def __init__(self, query):
         self.type = query[0]
@@ -7,6 +7,8 @@ class Query:
         if self.type == 'add':
             self.name = query[2]
 
+
+# create Query objects to process
 def read_queries():
     n = int(input())
     return [Query(input().split()) for i in range(n)]
@@ -17,29 +19,26 @@ def write_responses(result):
 def process_queries(queries):
     result = []
     # Keep list of all existing (i.e. not deleted yet) contacts.
-    contacts = []
+    contacts = [None] * (10**7)
+
+
     for cur_query in queries:
+        ph_number = cur_query.number 
+      
+
         if cur_query.type == 'add':
             # if we already have contact with such number,
             # we should rewrite contact's name
-            for contact in contacts:
-                if contact.number == cur_query.number:
-                    contact.name = cur_query.name
-                    break
-            else: # otherwise, just add it
-                contacts.append(cur_query)
+            contacts[ph_number] = cur_query.name
+        
+                
         elif cur_query.type == 'del':
-            for j in range(len(contacts)):
-                if contacts[j].number == cur_query.number:
-                    contacts.pop(j)
-                    break
+            contacts[ph_number] = None 
+               
         else:
-            response = 'not found'
-            for contact in contacts:
-                if contact.number == cur_query.number:
-                    response = contact.name
-                    break
+            response = contacts[ph_number] if contacts[ph_number] is not None else "not found"  
             result.append(response)
+
     return result
 
 if __name__ == '__main__':

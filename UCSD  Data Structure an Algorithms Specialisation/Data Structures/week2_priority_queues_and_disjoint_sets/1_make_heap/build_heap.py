@@ -11,8 +11,8 @@ def build_heap(data):
     # using selection sort algorithm and saves the resulting sequence
     # of swaps. This turns the given array into a min heap, but in the worst
     # case gives a quadratic number of swaps.
-    #
-    # TODO: replace by a more efficient implementation
+    
+  
     swaps = []
 
     #0 indexing 

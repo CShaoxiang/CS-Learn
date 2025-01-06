@@ -20,13 +20,14 @@ class TreeOrders:
     self.result = []
     # Finish the implementation
     # You may need to add a new recursive method to do that
-                
+    self._inOrderTraversal(0)          
     return self.result
 
   def preOrder(self):
     self.result = []
     # Finish the implementation
     # You may need to add a new recursive method to do that
+    self._preOrderTraversal(0)
                 
     return self.result
 
@@ -34,8 +35,36 @@ class TreeOrders:
     self.result = []
     # Finish the implementation
     # You may need to add a new recursive method to do that
-                
+    self._postOrderTraversal(0)
     return self.result
+  
+  def _inOrderTraversal(self,node):
+    if node == -1:
+      return 
+    
+    self._inOrderTraversal(self.left[node])
+    self.result.append(self.key[node])
+    self._inOrderTraversal(self.right[node])
+
+  def _preOrderTraversal(self, node):
+        if node == -1:  # Base case: no node
+            return
+        # Visit current node, left subtree, then right subtree
+        self.result.append(self.key[node])
+        self._preOrderTraversal(self.left[node])
+        self._preOrderTraversal(self.right[node])
+
+  def _postOrderTraversal(self, node):
+        if node == -1:  # Base case: no node
+            return
+        # Visit left subtree, right subtree, then current node
+        self._postOrderTraversal(self.left[node])
+        self._postOrderTraversal(self.right[node])
+        self.result.append(self.key[node])
+    
+
+
+   
 
 def main():
 	tree = TreeOrders()
