@@ -133,13 +133,16 @@ def insert(x):
 def erase(x): 
   global root
   # Implement erase yourself
-  pass
+  n = find(root,x)
+  splay(n)
+  
 
 def search(x): 
   global root
   # Implement find yourself
-  
-  return False
+  n = find(root,x)
+  splay(n)
+  return n
   
 def sum(fr, to): 
   global root

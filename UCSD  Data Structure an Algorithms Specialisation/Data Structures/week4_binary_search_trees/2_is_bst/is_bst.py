@@ -3,7 +3,7 @@ import random
 import sys, threading
 
 sys.setrecursionlimit(10**9) # max depth of recursion
-threading.stack_size(2**28)  # new thread will get stack of such size
+threading.stack_size(2**27)  # new thread will get stack of such size
 
 def IsBinarySearchTree(tree):
   # Implement correct algorithm here
@@ -25,33 +25,6 @@ def check_node_bst(tree,node, min_value , max_value):
    # check 
    return check_node_bst(tree,tree[node][1],min_value,tree[node][0] -1 ) and check_node_bst(tree,tree[node][2],tree[node][0] +1,max_value)
 
-# def generate_stress_test(num_nodes):
-#     """
-#     Generate a stress test input for the BST verification program.
-
-#     :param num_nodes: Number of nodes in the tree (0 ≤ num_nodes ≤ 10^5).
-#     :return: A string representing the input for the program.
-#     """
-#     if num_nodes == 0:
-#         return "0\n"  # Empty tree case
-
-#     # Generate a binary search tree
-#     nodes = []
-#     keys = list(range(1, num_nodes + 1))  # Unique keys for simplicity
-#     random.shuffle(keys)  # Shuffle keys to create random BST structure
-
-#     # Build a valid BST structure
-#     for i in range(num_nodes):
-#         left = 2 * i + 1 if 2 * i + 1 < num_nodes else -1
-#         right = 2 * i + 2 if 2 * i + 2 < num_nodes else -1
-#         nodes.append((keys[i], left, right))
-
-#     # Format the result as the input format
-#     result = f"{num_nodes}\n"
-#     for key, left, right in nodes:
-#         result += f"{key} {left} {right}\n"
-
-#     return result
 
 
 def main():
