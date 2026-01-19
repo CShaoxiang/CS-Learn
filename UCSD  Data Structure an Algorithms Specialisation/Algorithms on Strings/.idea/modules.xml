@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/Algorithms on Strings.iml" filepath="$PROJECT_DIR$/.idea/Algorithms on Strings.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Week1 Suffix Trie/Week1 Suffix Trie.iml" filepath="$PROJECT_DIR$/Week1 Suffix Trie/Week1 Suffix Trie.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Week2 BWT And Suffix Array/Week2 BWT And Suffix Array.iml" filepath="$PROJECT_DIR$/Week2 BWT And Suffix Array/Week2 BWT And Suffix Array.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Week3 Suffix Array Pattern Matching/Week3 Suffix Array Pattern Matching.iml" filepath="$PROJECT_DIR$/Week3 Suffix Array Pattern Matching/Week3 Suffix Array Pattern Matching.iml" />
+    </modules>
+  </component>
+</project>
